@@ -1,13 +1,22 @@
 # docker
+
+## Quick Start
 ## pull image
 `docker pull ivoryseeker/libam-img:latest`
 
 ## up container
 `docker run -it -v /home/chengyue/projects/LibAM/data:/work/libam/data --name libam --gpus all ivoryseeker/libam-img:latest /bin/bash`
 
-## re-up container
+## re-up container(if needed)
 `docker start libam && docker exec -it libam /bin/bash`
 
+## cp files
+`docker cp cp_into_container/*:/work/libam`
+
+## use
+edit the demo funciton in LibAM.py
+
+`python LibAM.py`
 
 # change:
 1. cp feature_extraction.py, embedding_generation.py into /work/libam
