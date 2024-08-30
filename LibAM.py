@@ -16,7 +16,8 @@ class LibAM:
         self.raw_detect_result_json_file_path = os.path.join(self.tpl_fast_result_dir_in_host, "tpl_fast_result.json")
 
         self.start_container_command = "docker start libam && docker exec -it libam /bin/bash"
-        self.feature_generation_command = "docker exec -it libam /bin/bash -c 'cd /work/libam && python3 feature_extraction.py'"
+        # 生成之前需要先删除之前的结果，否则会出现异常
+        self.feature_generation_command = "docker exec -it libam /bin/bash -c 'cd /work/libam && rm -rf /work/libam/data/dataset2/1_binary/candidate/*_ && python3 feature_extraction.py'"
         self.embedding_generation_command = "docker exec -it libam /bin/bash -c 'cd /work/libam && python3 embedding_generation.py'"
         self.run_scan_command = "docker exec -it libam /bin/bash -c 'cd /work/libam && python3 detector.py'"
 
@@ -64,7 +65,7 @@ class LibAM:
         """
         # remove target files
         shutil.rmtree(self.target_binary_dir_in_host, ignore_errors=True)
-        os.mkdir(self.target_binary_dir_in_host)
+        os.mkdir(self.target_binary_dir_in_host, ignore_errors=True)
 
         shutil.rmtree(self.target_info_dir_in_host, ignore_errors=True)
         shutil.rmtree(self.function_compare_result_dir_in_host, ignore_errors=True)
