@@ -10,7 +10,6 @@ sys.path.append("code/reuse_area_exploration/TPL_detection")
 sys.path.append("code/reuse_area_exploration/reuse_area_detection")
 
 import all_func_compare_isrd as anchor_detection_module
-import binary_preprocess as binary_preprocess_module
 import Generate_func_embedding as embeddings_generate_module
 
 
@@ -19,7 +18,7 @@ def cli():
 
     # model path
     subfcg_model_path = os.path.join(WORK_PATH, "code/embeddings_generate/gnn-best.pt")
-    afcg_model_path = os.path.join(WORK_PATH, "code/embeddings_generate/fcg_gnn-best-0.01.pt")
+    afcg_model_path = os.path.join(WORK_PATH, "code/reuse_area_exploration/Embeded-GNN/fcg_gnn-best-0.01.pt")
 
     # candidate dir
     candidate_dir = os.path.join(DATA_PATH, "candidate")
@@ -28,9 +27,14 @@ def cli():
     time_cost_dir = os.path.join(candidate_dir, "timecost")
 
     # raw feature
-    candidate_feature_dir_path = os.path.join(candidate_dir, "features")
-    candidate_fcg_dir_path = os.path.join(candidate_feature_dir_path, "fcg")
+    candidate_raw_features_dir_path = os.path.join(candidate_dir, "raw_features")
+    candidate_fcg_dir_path = os.path.join(candidate_raw_features_dir_path, "fcg")
+    candidate_feature_dir_path = os.path.join(candidate_raw_features_dir_path, "feature")
+
+    # acfg
     candidate_afcg_dir_path = os.path.join(candidate_dir, "afcg")
+
+    # subgraph
     candidate_subgraph_dir_path = os.path.join(candidate_dir, "subgraph")
 
     # embedding

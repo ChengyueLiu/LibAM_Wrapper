@@ -21,8 +21,8 @@ def cli():
 
     # children dir
     time_cost_dir = os.path.join(candidate_dir, "timecost")
-    candidate_binary_dir_path = os.path.join(candidate_dir, "binaries")
-    candidate_feature_dir_path = os.path.join(candidate_dir, "features")
+    candidate_binary_dir_path = os.path.join(candidate_dir, "binaries")  # input
+    candidate_feature_dir_path = os.path.join(candidate_dir, "raw_features")  # output
 
     # clean the candidate_feature_dir_path, if not clean, these dir ends with "_" will cause errors.
     if os.path.exists(candidate_binary_dir_path):
