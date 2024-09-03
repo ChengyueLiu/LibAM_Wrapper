@@ -48,7 +48,7 @@ def cli():
     embeddings_generate_module.generate_subgraph(DATA_PATH+"4_embedding_target/tar_subgraph",
                                             os.path.join(DATA_PATH, "2_target/fcg"),
                                             DATA_PATH+"4_embedding/target_in9_embedding.json",
-                                            model_path=os.path.join(WORK_PATH, "code/reuse_area_exploration/Embeded-GNN/fcg_gnn-best-0.01.pt"))
+                                            model_path=os.path.join(WORK_PATH, "code/reuse_area_exploration/Embeded-GNN/fcg_gnn-best-0.01.pt")) # TODO 这里是模型地址，如果是LIBDB 需要换模型。
 
     # 3. function_compare
     print("start anchor detection......")
@@ -78,6 +78,9 @@ def cli():
                         DATA_PATH+"4_embedding/tar_subgraph",
                         DATA_PATH+"4_embedding/cdd_subgraph")
     TPL_detection_module2.get_result_json(os.path.join(DATA_PATH, save_path+"tpl_fast_result"), os.path.join(DATA_PATH, save_path+"tpl_fast_result.json"))
+
+    # TODO 文件需要平铺，所以需要先建立这种映射关系。
+    # TODO 文件到library的映射关系。
 
     print(f"ALL DONE, results saved in {DATA_PATH}6_tpl_fast_result/")
 if __name__ == "__main__":

@@ -27,32 +27,37 @@ def cli():
 
     # 1. get feature and fcg
     print("start bianry preprocess......")
-    binary_preprocess_module.getAllFiles(DATA_PATH + "3_candidate/timecost", DATA_PATH + "1_binary/candidate",
+    binary_preprocess_module.getAllFiles(DATA_PATH + "3_candidate/timecost",
+                                         DATA_PATH + "1_binary/candidate",
                                          DATA_PATH + "3_candidate/", mode="1")
 
     # # # 2. get embedding
     print("generate in9 bl5 embedding......")
-    embeddings_generate_module.subfcg_embedding(DATA_PATH+"4_embedding/timecost",
-                                                DATA_PATH+"3_candidate/feature",
-                                                DATA_PATH+"4_embedding/candidate_in9_bl5_embedding.json",
+    embeddings_generate_module.subfcg_embedding(DATA_PATH + "4_embedding/timecost",
+                                                DATA_PATH + "3_candidate/feature",
+                                                DATA_PATH + "4_embedding/candidate_in9_bl5_embedding.json",
                                                 model_path=WORK_PATH + "/code/embeddings_generate/gnn-best.pt")
 
     print("generate in9 embedding......")
-    embeddings_generate_module.generate_afcg(DATA_PATH+"4_embedding/cdd_afcg",
-                                            os.path.join(DATA_PATH, "3_candidate/fcg"),
-                                            DATA_PATH+"4_embedding/candidate_in9_embedding.json",
-                                            model_path=os.path.join(WORK_PATH, "code/reuse_area_exploration/Embeded-GNN/fcg_gnn-best-0.01.pt"))
+    embeddings_generate_module.generate_afcg(DATA_PATH + "4_embedding/cdd_afcg",
+                                             os.path.join(DATA_PATH, "3_candidate/fcg"),
+                                             DATA_PATH + "4_embedding/candidate_in9_embedding.json",
+                                             model_path=os.path.join(WORK_PATH,
+                                                                     "code/reuse_area_exploration/Embeded-GNN/fcg_gnn-best-0.01.pt"))
 
     print("generate subgraph......")
-    embeddings_generate_module.generate_subgraph(DATA_PATH+"4_embedding/cdd_subgraph",
-                                            os.path.join(DATA_PATH, "3_candidate/fcg"),
-                                            DATA_PATH+"4_embedding/candidate_in9_embedding.json",
-                                            model_path=os.path.join(WORK_PATH, "code/reuse_area_exploration/Embeded-GNN/fcg_gnn-best-0.01.pt"))
+    embeddings_generate_module.generate_subgraph(DATA_PATH + "4_embedding/cdd_subgraph",
+                                                 os.path.join(DATA_PATH, "3_candidate/fcg"),
+                                                 DATA_PATH + "4_embedding/candidate_in9_embedding.json",
+                                                 model_path=os.path.join(WORK_PATH,
+                                                                         "code/reuse_area_exploration/Embeded-GNN/fcg_gnn-best-0.01.pt"))
     print(f"generate embedding engine")
-    anchor_detection_module.generate_vector_database(os.path.join(DATA_PATH, "4_embedding/candidate_in9_embedding.json"),
-                                                      os.path.join(DATA_PATH, "4_embedding/embedding_annoy"))
+    anchor_detection_module.generate_vector_database(
+        os.path.join(DATA_PATH, "4_embedding/candidate_in9_embedding.json"),
+        os.path.join(DATA_PATH, "4_embedding/embedding_annoy"))
 
     print(f"ALL Done! embedding saved in {DATA_PATH}4_embedding/")
+
 
 if __name__ == "__main__":
     cli()

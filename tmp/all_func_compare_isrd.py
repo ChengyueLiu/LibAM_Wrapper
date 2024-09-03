@@ -419,9 +419,11 @@ def func_compare_annoy_fast_multi(object_path, score_opath, score_opath2, time_o
     if False == os.path.exists(embed_path):
         os.makedirs(embed_path)
     
-    
+
+
+
     p_list = []
-    Process_num = 35
+    Process_num = min(35, len(detect_binary_func_vec_list))
     for i in range(Process_num):
         # func_compare_annoy_fast_one(detect_binary_func_vec_list[int((i/Process_num)*len(detect_binary_func_vec_list)):int(((i+1)/Process_num)*len(detect_binary_func_vec_list))], detect_binary_func_vec, candidate_binary_func_vec, score_opath, score_opath2, time_opath, embed_path)
         p = Process(target=func_compare_annoy_fast_one, args=(detect_binary_func_vec_list[int((i/Process_num)*len(detect_binary_func_vec_list)):int(((i+1)/Process_num)*len(detect_binary_func_vec_list))], detect_binary_func_vec, score_opath, score_opath2, time_opath, embed_path))

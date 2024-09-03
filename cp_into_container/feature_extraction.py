@@ -23,15 +23,24 @@ import compare_area as reuse_area_detection_module
 
 
 def cli():
-    print("hello libAE")
 
-    # 1. get feature and fcg
-    print("start bianry preprocess......")
-    feature_save_path =  DATA_PATH + "3_candidate/"
-    binary_preprocess_module.getAllFiles(DATA_PATH + "3_candidate/timecost", DATA_PATH + "1_binary/candidate",
-                                         feature_save_path, mode="1")
+    print("start generate candidate feature......")
 
-    print(f"ALl Done! feature saved in {feature_save_path}")
+    # candidate 信息文件夹
+    candidate_dir = os.path.join(DATA_PATH, "candidate")
+
+    # 子目录
+    time_cost_dir = os.path.join(candidate_dir, "timecost")
+    candidate_binary_dir_path = os.path.join(candidate_dir, "binaries")
+    candidate_feature_dir_path = os.path.join(candidate_dir, "features")
+
+    # 提取特征
+    binary_preprocess_module.getAllFiles(time_cost_dir,
+                                         candidate_binary_dir_path,
+                                         candidate_feature_dir_path, mode="1")
+
+    print(f"ALl Done! feature saved in {candidate_feature_dir_path}")
+
 
 if __name__ == "__main__":
     cli()
