@@ -33,19 +33,19 @@ def cli():
 
     # # 2. get embedding
     print("generate in9 bl5 embedding......")
-    embeddings_generate_module.subfcg_embedding(DATA_PATH+"4_embedding/timecost",
+    embeddings_generate_module.subfcg_embedding(DATA_PATH+"4_embedding_target/timecost",
                                                 DATA_PATH+"2_target/feature",
                                                 DATA_PATH+"4_embedding/target_in9_bl5_embedding.json",
                                                 model_path=WORK_PATH + "/code/embeddings_generate/gnn-best.pt")
 
     print("generate in9 embedding......")
-    embeddings_generate_module.generate_afcg(DATA_PATH+"4_embedding/tar_afcg",
+    embeddings_generate_module.generate_afcg(DATA_PATH+"4_embedding_target/tar_afcg",
                                             os.path.join(DATA_PATH, "2_target/fcg"),
                                             DATA_PATH+"4_embedding/target_in9_embedding.json",
                                             model_path=os.path.join(WORK_PATH, "code/reuse_area_exploration/Embeded-GNN/fcg_gnn-best-0.01.pt"))
 
     print("generate subgraph......")
-    embeddings_generate_module.generate_subgraph(DATA_PATH+"4_embedding/tar_subgraph",
+    embeddings_generate_module.generate_subgraph(DATA_PATH+"4_embedding_target/tar_subgraph",
                                             os.path.join(DATA_PATH, "2_target/fcg"),
                                             DATA_PATH+"4_embedding/target_in9_embedding.json",
                                             model_path=os.path.join(WORK_PATH, "code/reuse_area_exploration/Embeded-GNN/fcg_gnn-best-0.01.pt"))
