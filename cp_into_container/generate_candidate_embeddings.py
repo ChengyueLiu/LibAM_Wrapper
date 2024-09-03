@@ -26,46 +26,48 @@ def cli():
     # time
     time_cost_dir = os.path.join(candidate_dir, "timecost")
 
+    # ----- input -----
     # raw feature
     candidate_raw_features_dir_path = os.path.join(candidate_dir, "raw_features")
     candidate_fcg_dir_path = os.path.join(candidate_raw_features_dir_path, "fcg")
     candidate_feature_dir_path = os.path.join(candidate_raw_features_dir_path, "feature")
 
-    # acfg
-    candidate_afcg_dir_path = os.path.join(candidate_dir, "afcg")
-
-    # subgraph
-    candidate_subgraph_dir_path = os.path.join(candidate_dir, "subgraph")
-
-    # embedding
+    # ----- output -----
+    # 1. embedding
     candidate_embedding_dir_path = os.path.join(candidate_dir, "embeddings")
     candidate_in9_bl5_embedding_json_path = os.path.join(candidate_embedding_dir_path,
                                                          "candidate_in9_bl5_embedding.json")
     candidate_in9_embedding_json_path = os.path.join(candidate_embedding_dir_path, "candidate_in9_embedding.json")
 
-    # embedding annoy
+    # 2. acfg
+    candidate_afcg_dir_path = os.path.join(candidate_dir, "afcg")
+
+    # 3. subgraph
+    candidate_subgraph_dir_path = os.path.join(candidate_dir, "subgraph")
+
+    # 4. embedding annoy
     embedding_annoy_dir_path = os.path.join(candidate_dir, "embedding_annoy")
 
-    # # # 2. get embedding
-    print("generate in9 bl5 embedding......")
+    # generate candidate embeddings
+    print("1. generate in9 bl5 embedding......")
     embeddings_generate_module.subfcg_embedding(TIME_PATH=time_cost_dir,
                                                 test_gemini_feat_paths=candidate_feature_dir_path,
                                                 savePath=candidate_in9_bl5_embedding_json_path,
                                                 model_path=subfcg_model_path)
 
-    print("generate in9 embedding......")
+    print("2. generate in9 embedding......")
     embeddings_generate_module.generate_afcg(fcg_path=candidate_fcg_dir_path,
                                              func_embedding_path=candidate_in9_embedding_json_path,
                                              save_path=candidate_afcg_dir_path,
                                              model_path=afcg_model_path)
 
-    print("generate subgraph......")
+    print("3. generate subgraph......")
     embeddings_generate_module.generate_subgraph(fcg_path=candidate_fcg_dir_path,
                                                  func_embedding_path=candidate_in9_embedding_json_path,
                                                  save_path=candidate_subgraph_dir_path,
                                                  model_path=afcg_model_path)
 
-    print(f"generate embedding engine")
+    print(f"4. generate embedding engine")
     anchor_detection_module.generate_vector_database(candidate_in9_embedding_json_path,
                                                      embedding_annoy_dir_path)
 
