@@ -1,33 +1,54 @@
 # docker
 
-## Quick Start
-## pull image
-`docker pull ivoryseeker/libam-img:latest`
+## Requirements
 
-## up container
-`docker run -it -v /home/chengyue/projects/LibAM/data:/work/libam/data --name libam --gpus all ivoryseeker/libam-img:latest /bin/bash`
+1. pull image
+   `docker pull ivoryseeker/libam-img:latest`
 
-## re-up container(if needed)
-`docker start libam && docker exec -it libam /bin/bash`
+2. up container
+   `docker run -it -v /home/chengyue/projects/LibAM/data:/work/libam/data --name libam --gpus all ivoryseeker/libam-img:latest /bin/bash`
 
-## cp files
-`docker cp cp_into_container/*:/work/libam`
+3. put the files in `cp_into_container` into `/work/libam`
 
-## use
-edit the demo funciton in LibAM.py
+4. replace the files under `replace_files` into the container, the path is written in `Note.md`
+
+## Frequently Use command:
+
+1. re-up container(if needed)
+   `docker start libam && docker exec -it libam /bin/bash`
+
+2. cp files(if needed)
+   `docker cp cp_into_container/*:/work/libam`
+
+## Usage under container
+
+### cd workspace
+
+1. `cd container`
+2. `cd /work/libam`
+
+### prepare candidate
+
+1. put candidate binaries under /data/dataset2/candidate/binaries
+2. extract candidate raw features: `python3 extract_candidate_features.py`
+3. genearate candidate embeddings: `python3 generate_candidate_embeddings.py`
+
+### prepare target
+
+1. put target binaries under /data/dataset2/target/binaries
+2. run detector: `python3 detector.py`
+3. check the result in `/data/dataset2/tpl_detection_result/tpl_detection_result.json`
+
+### Usage by Wrapper(On Going)
 
 `python LibAM.py`
 
-# change:
-1. cp feature_extraction.py, embedding_generation.py into /work/libam
-1. all_func_compare_isrd.py ---> /work/libam/code/anchor_detection/semantic_anchor_detection
+# Changes
 
-# pytorch
-# uninstall old pytorch
-`pip uninstall torch torchvision torchaudio`
+# Reinstall pytorch(if the installed pytorch is not match to the cuda version)
 
-# install pytorch 11.8 which is match to our cuda version
-`pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118`
+1. uninstall old pytorch
+   `pip uninstall torch torchvision torchaudio`
 
-
-# TODO rebuild image
+2. install pytorch 11.8 which is match to our cuda version
+   `pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118`
