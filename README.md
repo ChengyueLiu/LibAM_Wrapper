@@ -20,7 +20,7 @@ edit the demo funciton in LibAM.py
 
 # change:
 1. cp feature_extraction.py, embedding_generation.py into /work/libam
-
+1. all_func_compare_isrd.py ---> /work/libam/code/anchor_detection/semantic_anchor_detection
 
 # pytorch
 # uninstall old pytorch

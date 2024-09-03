@@ -48,6 +48,9 @@ def cli():
                                             os.path.join(DATA_PATH, "3_candidate/fcg"),
                                             DATA_PATH+"4_embedding/candidate_in9_embedding.json",
                                             model_path=os.path.join(WORK_PATH, "code/reuse_area_exploration/Embeded-GNN/fcg_gnn-best-0.01.pt"))
+    print(f"generate embedding engine")
+    anchor_detection_module.generate_vector_database(os.path.join(DATA_PATH, "4_embedding/candidate_in9_embedding.json"),
+                                                      os.path.join(DATA_PATH, "4_embedding/embedding_annoy"))
 
     print(f"ALL Done! embedding saved in {DATA_PATH}4_embedding/")
 

@@ -57,7 +57,7 @@ def cli():
         os.path.join(DATA_PATH, "5_func_compare_result/score"),
         os.path.join(DATA_PATH, "5_func_compare_result/score_top50"),
         os.path.join(DATA_PATH, "5_func_compare_result"),
-        os.path.join(DATA_PATH, "5_func_compare_result/embedding_annoy"))
+        os.path.join(DATA_PATH, "4_embedding/embedding_annoy"))
 
     # 4. TPL detection
     print("start fast TPL detection......")
