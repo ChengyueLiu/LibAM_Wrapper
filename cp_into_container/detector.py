@@ -1,3 +1,4 @@
+import shutil
 import sys, os
 # import click
 from settings import *
@@ -36,12 +37,22 @@ def cli():
     time_cost_dir = os.path.join(target_dir, "timecost")
     
     # 1. extract raw features
+    target_binary_dir_path = os.path.join(target_dir, "binaries")  # input
+
     target_raw_features_dir_path = os.path.join(target_dir, "raw_features")
     target_fcg_dir_path = os.path.join(target_raw_features_dir_path, "fcg")
     target_feature_dir_path = os.path.join(target_raw_features_dir_path, "feature")
 
     print("1. extract feature")
+    # clean the candidate_feature_dir_path, if not clean, these dir ends with "_" will cause errors.
+    if os.path.exists(target_binary_dir_path):
+        for item in os.listdir(target_binary_dir_path):
+            item_path = os.path.join(target_binary_dir_path, item)
+            if item.endswith("_") and os.path.isdir(item_path):
+                shutil.rmtree(item_path, ignore_errors=True)
+
     binary_preprocess_module.getAllFiles(time_cost_dir,
+                                         target_binary_dir_path,
                                          target_raw_features_dir_path, mode="1")
 
     # 2. generate embeddings
@@ -88,7 +99,6 @@ def cli():
     print("3. function comparing......")
     anchor_detection_module.func_compare_annoy_fast_multi(
         target_in9_embedding_json_path,
-        target_in9_embedding_json_path,
         function_compare_result_score_dir,
         function_compare_result_score_top50_dir,
         function_compare_result_dir,
@@ -113,6 +123,7 @@ def cli():
     tpl_fast_area_dir_path = os.path.join(detection_result_dir_path, "tpl_fast_area")
     tpl_fast_time_dir_path = os.path.join(detection_result_dir_path, "tpl_fast_time")
     sim_func_list_dir_path = os.path.join(detection_result_dir_path, "sim_func_list")
+    result_json_file_path = os.path.join(detection_result_dir_path, "tpl_fast_result.json")
 
     # detection
     anchor_reinforcement_module.tpl_detection_fast_annoy(
@@ -135,13 +146,13 @@ def cli():
 
 
 
-    # TPL_detection_module2.get_result_json(os.path.join(DATA_PATH, save_path + "tpl_fast_result"),
-    #                                       os.path.join(DATA_PATH, save_path + "tpl_fast_result.json"))
+    TPL_detection_module2.get_result_json(tpl_fast_result_dir_path,
+                                          result_json_file_path)
 
     # TODO 文件需要平铺，所以需要先建立这种映射关系。
     # TODO 文件到library的映射关系。
 
-    print(f"ALL DONE, results saved in {DATA_PATH}6_tpl_fast_result/")
+    print(f"ALL DONE, results saved in {result_json_file_path}")
 
 
 if __name__ == "__main__":

@@ -479,8 +479,8 @@ def tpl_detection_fast_one_annoy_1_5(func_path_list, tar_fcg_path, cdd_fcg_path,
             json.dump(cal_time, ff)  
 
 
-def tpl_detection_fast_one_annoy(func_path_list, tar_fcg_path, cdd_fcg_path, func_path, feature_save_path, time_path, com_funcs_path, sim_funcs_path, cdd_func_embeddings, gnn, fcgs_num, obj_com_funcs_dict, cdd_com_funcs_dict, area_save_path, tar_afcg_dict, cdd_afcg_dict, tar_subgraph_dict, cdd_subgraph_dict, tar_fcg_dict, cdd_fcg_dict):
-    for object_item in tqdm(func_path_list):
+def tpl_detection_fast_one_annoy(func_path_list, tar_fcg_path, cdd_fcg_path, func_path, feature_save_path, time_path, sim_funcs_path, cdd_func_embeddings, gnn, fcgs_num, obj_com_funcs_dict, cdd_com_funcs_dict, area_save_path, tar_afcg_dict, cdd_afcg_dict, tar_subgraph_dict, cdd_subgraph_dict, tar_fcg_dict, cdd_fcg_dict):
+    for object_item in func_path_list:
         
         cal_time = {}
         reuse_result = {}
@@ -503,7 +503,7 @@ def tpl_detection_fast_one_annoy(func_path_list, tar_fcg_path, cdd_fcg_path, fun
         
         start = time.time()
         # print("********* compare "+object_name+"**********")
-        for candidate_name in tqdm(cdd_project_dict, desc = object_name+" ..."):
+        for candidate_name in cdd_project_dict:
             # if "bzip2" in object_name:
             # if candidate_name == "minizip":
             
@@ -1316,13 +1316,14 @@ def tpl_detection_fast_annoy(tar_fcg_path, cdd_fcg_path, func_path, feature_save
     #     matched_func_list = cdd_project_dict[candidate_name]
         
         # json.dump(matched_func_list, open(os.path.join(sim_funcs_path, object_name+"___"+candidate_name+".json"), "w"))
-        
-    
+
+
+
     p_list = []
     Process_num = 35
     for i in range(Process_num):
         # tpl_detection_fast_one_annoy(object_item_list[int((i/Process_num)*len(object_item_list)):int(((i+1)/Process_num)*len(object_item_list))], tar_fcg_path, cdd_fcg_path, func_path, feature_save_path, time_path, com_funcs_path, sim_funcs_path, cdd_func_embeddings, gnn, fcgs_num, obj_com_funcs, cdd_com_funcs, area_save_path, tar_afcg_dict, cdd_afcg_dict, tar_subgraph_dict, cdd_subgraph_dict, tar_fcg_dict, cdd_fcg_dict)
-        p = Process(target=tpl_detection_fast_one_annoy, args=(object_item_list[int((i/Process_num)*len(object_item_list)):int(((i+1)/Process_num)*len(object_item_list))], tar_fcg_path, cdd_fcg_path, func_path, feature_save_path, time_path, com_funcs_path, sim_funcs_path, cdd_func_embeddings, gnn, fcgs_num, obj_com_funcs, cdd_com_funcs, area_save_path, tar_afcg_dict, cdd_afcg_dict, tar_subgraph_dict, cdd_subgraph_dict, tar_fcg_dict, cdd_fcg_dict))
+        p = Process(target=tpl_detection_fast_one_annoy, args=(object_item_list[int((i/Process_num)*len(object_item_list)):int(((i+1)/Process_num)*len(object_item_list))], tar_fcg_path, cdd_fcg_path, func_path, feature_save_path, time_path, sim_funcs_path, cdd_func_embeddings, gnn, fcgs_num, obj_com_funcs, cdd_com_funcs, area_save_path, tar_afcg_dict, cdd_afcg_dict, tar_subgraph_dict, cdd_subgraph_dict, tar_fcg_dict, cdd_fcg_dict))
         p_list.append(p)
             #args_list.append([candidate_software, object_funcs, object_software, candidate_funcs, object_matrix, sims_list_opath])
             # compare_one_cdd_bin([candidate_software, object_funcs, object_software, candidate_funcs, object_matrix, sims_list_opath])
@@ -1331,7 +1332,9 @@ def tpl_detection_fast_annoy(tar_fcg_path, cdd_fcg_path, func_path, feature_save
     for p in p_list:
         p.join()
 
-
+    # 使用tqdm添加进度条
+    for p in tqdm(p_list, desc="tpl_detection_fast_one_annoy", total=len(p_list)):
+        p.join()
 
 
 
