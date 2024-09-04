@@ -6,20 +6,25 @@ import time
 
 class LibAM:
 
-    def __init__(self, data_dir_in_host="/home/chengyue/projects/LibAM/data/dataset2"):
-        self.data_dir_in_host = data_dir_in_host
+    def __init__(self, data_dir_in_host):
+        # paths
+        self.data_dir = data_dir_in_host
+        self.target_dir = os.path.join(self.data_dir, "target")
+        self.target_binary_dir = os.path.join(self.target_dir, "binaries")
+        self.result_dir = os.path.join(self.data_dir, "tpl_detection_result")
+        self.result_json_file = os.path.join(self.result_dir, "tpl_fast_result.json")
 
-        self.target_binary_dir_in_host = os.path.join(data_dir_in_host, "1_binary/target")
-        self.target_info_dir_in_host = os.path.join(data_dir_in_host, "2_target")
-        self.function_compare_result_dir_in_host = os.path.join(data_dir_in_host, "5_func_compare_result")
-        self.tpl_fast_result_dir_in_host = os.path.join(data_dir_in_host, "6_tpl_fast_result")
-        self.raw_detect_result_json_file_path = os.path.join(self.tpl_fast_result_dir_in_host, "tpl_fast_result.json")
-
+        # commands
+        # start container
         self.start_container_command = "docker start libam && docker exec -it libam /bin/bash"
-        # 生成之前需要先删除之前的结果，否则会出现异常
-        self.feature_generation_command = "docker exec -it libam /bin/bash -c 'cd /work/libam && rm -rf /work/libam/data/dataset2/1_binary/candidate/*_ && python3 feature_extraction.py'"
-        self.embedding_generation_command = "docker exec -it libam /bin/bash -c 'cd /work/libam && python3 embedding_generation.py'"
-        self.run_scan_command = "docker exec -it libam /bin/bash -c 'cd /work/libam && python3 detector.py'"
+        # cd workspace
+        self.basic_command = "docker exec -it libam /bin/bash -c 'cd /work/libam && '"
+        # extract feature
+        self.extract_candidate_features_command = self.basic_command + "python3 extract_candidate_features.py'"
+        # generate embeddings
+        self.generate_candidate_embeddings_command = self.basic_command + "python3 generate_candidate_embeddings.py'"
+        # detect
+        self.detect_command = self.basic_command + "python3 detector.py'"
 
     def run_system_command(self, command):
         return subprocess.run(command, shell=True, capture_output=True, text=True)
@@ -33,43 +38,21 @@ class LibAM:
         """
         return self.run_system_command(self.start_container_command)
 
-    def run_feature_generation(self):
+    def extract_candidate_features(self):
         """
         generate features for all candidate libraries
 
         :return:
         """
-        return self.run_system_command(self.feature_generation_command)
+        return self.run_system_command(self.extract_candidate_features_command)
 
-    def run_embedding_generation(self):
+    def generate_candidate_embeddings(self):
         """
         generate embeddings for all candidate libraries
 
         :return:
         """
-        return self.run_system_command(self.embedding_generation_command)
-
-    def run_scan(self):
-        """
-        scan the target binary
-
-        :return:
-        """
-        return self.run_system_command(self.run_scan_command)
-
-    def clean_dirs(self):
-        """
-        clean the directories to avoid unexpected exceptions
-
-        :return:
-        """
-        # remove target files
-        shutil.rmtree(self.target_binary_dir_in_host, ignore_errors=True)
-        os.mkdir(self.target_binary_dir_in_host, ignore_errors=True)
-
-        shutil.rmtree(self.target_info_dir_in_host, ignore_errors=True)
-        shutil.rmtree(self.function_compare_result_dir_in_host, ignore_errors=True)
-        shutil.rmtree(self.tpl_fast_result_dir_in_host, ignore_errors=True)
+        return self.run_system_command(self.generate_candidate_embeddings_command)
 
     def detect(self, binary_path: str, result_path: str):
         """
@@ -84,20 +67,17 @@ class LibAM:
         """
         start_at = time.perf_counter()
         # clean dirs
-        print("Cleaning directories...")
-        self.clean_dirs()
-
         # copy target binary to target dir
         print("Copying target binary to target dir...")
-        shutil.copy(binary_path, self.target_binary_dir_in_host)
+        shutil.copy(binary_path, self.target_binary_dir)
 
         # run scan
         print("Running scan...")
-        self.run_scan()
+        self.run_system_command(self.detect_command)
 
         # copy out result
         print("Copying result...")
-        shutil.copytree(self.raw_detect_result_json_file_path, result_path)
+        shutil.copytree(self.result_json_file, result_path)
 
         scan_duration = time.perf_counter() - start_at
         print(f"ALL DONE in {scan_duration}s! Result saved in {result_path}")
@@ -107,15 +87,15 @@ class LibAM:
 
 def demo():
     data_dir_in_host = "/home/chengyue/projects/LibAM/data/dataset2"
+    binary_path = "/home/chengyue/projects/LibAM/data/backup/binaries/bzip2"
+    result_path = "/home/chengyue/projects/LibAM/demo_result.json"
 
-    libam_detector = LibAM(data_dir_in_host)
-    # libam_detector.start_container()
-    # libam_detector.run_feature_generation()
-    # libam_detector.run_embedding_generation()
+    detector = LibAM(data_dir_in_host)
+    # detector.start_container()
+    # detector.extract_candidate_features()
+    # detector.generate_candidate_embeddings()
 
-    binary_path = "/home/chengyue/projects/LibAM/data/dataset2/1_binary_backup/target/bzip2"
-    result_path = "/home/chengyue/projects/LibAM/data/demo_result.json"
-    libam_detector.detect(binary_path, result_path)
+    detector.detect(binary_path, result_path)
 
 
 if __name__ == '__main__':
