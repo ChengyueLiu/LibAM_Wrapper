@@ -69,7 +69,7 @@ class LibAM:
         # clean dirs
         # copy target binary to target dir
         print("Copying target binary to target dir...")
-        shutil.copy(binary_path, self.target_binary_dir)
+        # shutil.copy(binary_path, self.target_binary_dir)
 
         # run scan
         print("Running scan...")
