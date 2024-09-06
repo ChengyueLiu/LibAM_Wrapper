@@ -14,3 +14,9 @@
     2. 替换原来的路径合并为这两个参
     3. 优化了多进程处理
 `
+
+# 3. Generate_func_embedding.py
+替换：`code/libam/code/embeddings_generate/Generate_func_embedding.py`
+修改人：诚悦
+修改内容：
+    1. 增加缓存，减少文件读写次数。
