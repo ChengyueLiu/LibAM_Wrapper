@@ -154,14 +154,21 @@ def generate_subgraph(save_path, fcg_path, func_embedding_path, model_path):
     
     all_subgraph = {}
 
+    fcg_dict = {}
     for bin_func in tqdm(func_embeddings):
         # if bin_func == "xz|||lzma_alone_encoder":
         #     print("warning")
         bin_name = bin_func.split("|||")[0]
         func_name = bin_func.split("|||")[1]
         if not os.path.exists(os.path.join(save_path, bin_name+"_subgraph.json")):
-            with open(os.path.join(fcg_path, bin_name+"_fcg.pkl"), "rb") as f:
-                fcg = pickle.load(f)
+            path = os.path.join(fcg_path, bin_name+"_fcg.pkl")
+            if path not in fcg_dict:
+                with open(path, "rb") as f:
+                    fcg = pickle.load(f)
+                fcg_dict[path] = fcg
+            else:
+                fcg = fcg_dict[path]
+
 
             subgraph = {}
             subgraph["feature"] = []
